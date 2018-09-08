@@ -1,0 +1,22 @@
+---
+source: 
+  url: https://github.instance1.mycompany.com/api/v3/
+  token: s3cr3t
+  organization: leonardo-comelli
+  ignore:
+    - repo1
+    - repoN
+  content:
+    path: README.md
+    message: This repository was migrated to MyCompany Github automatically. [Click here]({{url}})
+  archive: true
+target:
+  url: https://github.instance2.mycompany.com/api/v3/
+  token: s3cr3t
+  organization: lcomelli
+git:
+  clone_path: /tmp
+  remote_name: new
+  ctr_file: /Users/leocomelli/.ssh/id_rsa
+  commit_author: Leonardo Comelli
+  commit_email: leonardo.comelli@mycompany.com
