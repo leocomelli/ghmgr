@@ -155,7 +155,7 @@ func listRepositoriesByOrg(cfg *Configuration) ([]*gh.Repository, error) {
 
 	var candidates []*gh.Repository
 	for {
-		repos, resp, err := source.Instance.Repositories.List(context.Background(), source.Organization, &gh.RepositoryListOptions{})
+		repos, resp, err := source.Instance.Repositories.ListByOrg(context.Background(), source.Organization, &gh.RepositoryListByOrgOptions{})
 		if err != nil {
 			return nil, err
 		}
