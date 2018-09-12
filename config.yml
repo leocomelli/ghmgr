@@ -3,6 +3,8 @@ source:
   url: https://github.instance1.mycompany.com/api/v3/
   token: s3cr3t
   organization: leonardo-comelli
+  only:
+    - repo0
   ignore:
     - repo1
     - repoN

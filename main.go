@@ -28,6 +28,7 @@ type Configuration struct {
 		Token        string
 		Organization string
 		Instance     *gh.Client
+		Only       []string
 		Ignore       []string
 		Archive      bool
 		Content      struct {
@@ -103,6 +104,7 @@ func main() {
 
 	log.WithField("amount", len(repos)).Info("some repositories was found")
 	log.WithField("names", cfg.Source.Ignore).Info("ignoring some repositories")
+	log.WithField("names", cfg.Source.Only).Info("only this repositories")
 
 	for i, repo := range repos {
 		log.WithField("name", *repo.Name).WithField("index", fmt.Sprintf("%d/%d", i+1, len(repos))).
@@ -155,7 +157,8 @@ func listRepositoriesByOrg(cfg *Configuration) ([]*gh.Repository, error) {
 
 	var candidates []*gh.Repository
 	for {
-		repos, resp, err := source.Instance.Repositories.ListByOrg(context.Background(), source.Organization, &gh.RepositoryListByOrgOptions{})
+		repos, resp, err := source.Instance.Repositories.ListByOrg(context.Background(), source.Organization, opts)
+		
 		if err != nil {
 			return nil, err
 		}
@@ -168,6 +171,15 @@ func listRepositoriesByOrg(cfg *Configuration) ([]*gh.Repository, error) {
 
 	var allRepos []*gh.Repository
 	for _, r := range candidates {
+
+		if len(cfg.Source.Only) > 0 {
+			if contains(cfg.Source.Only, *r.Name) {
+				allRepos = append(allRepos, r)
+			}
+			// Only and Ignore does not work together
+			continue
+		}
+
 		if !contains(cfg.Source.Ignore, *r.Name) {
 			allRepos = append(allRepos, r)
 		}
@@ -197,6 +209,7 @@ func createRepo(cfg *Configuration, repo *gh.Repository) (*gh.Repository, error)
 	}
 
 	log.WithField("url", *r.URL).Info("a new repository was created successfully")
+
 
 	return r, nil
 }
