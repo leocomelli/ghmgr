@@ -28,7 +28,7 @@ type Configuration struct {
 		Token        string
 		Organization string
 		Instance     *gh.Client
-		Only       []string
+		Only         []string
 		Ignore       []string
 		Archive      bool
 		Content      struct {
@@ -136,7 +136,6 @@ func main() {
 			}
 		}
 		log.Info("done =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
-		break
 	}
 }
 
@@ -158,7 +157,7 @@ func listRepositoriesByOrg(cfg *Configuration) ([]*gh.Repository, error) {
 	var candidates []*gh.Repository
 	for {
 		repos, resp, err := source.Instance.Repositories.ListByOrg(context.Background(), source.Organization, opts)
-		
+
 		if err != nil {
 			return nil, err
 		}
@@ -209,7 +208,6 @@ func createRepo(cfg *Configuration, repo *gh.Repository) (*gh.Repository, error)
 	}
 
 	log.WithField("url", *r.URL).Info("a new repository was created successfully")
-
 
 	return r, nil
 }
